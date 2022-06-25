@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <!-- Plantilla de Bootstrap -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/sketchy/bootstrap.min.css" integrity="sha384-RxqHG2ilm4r6aFRpGmBbGTjsqwfqHOKy1ArsMhHusnRO47jcGqpIQqlQK/kmGy9R" crossorigin="anonymous">
+
+    <!-- Plantilla de propia (main.css) -->
+    <link rel="stylesheet" href="{{url_for('static', filename='main.css')}}">
+
+    <!-- Fuente de google fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@700&family=Roboto+Mono:ital,wght@1,100&family=Saira+Condensed&display=swap" rel="stylesheet">
+
+    <title>Gestor de Tareas</title>
+</head>
+<body>
+
+    <main class="container p-4">
+        <h1 class="display-8 text-center mt-2 titulo">APLICACION DE GESTOR DE TAREAS</h1>
+
+        <div class="row"> <!--Este div ocupará 4 columnas del espacio (centrado) -->
+            <div class="col-md-8 offset-md-2 my-auto">
+                <div class="card"> <!--Creacion del objeto card -->
+
+                    <div class="card-header">
+                        <form action="/crear-tarea" autocomplete="off" method="post">
+                            <div class="form-group">
+                                <input type="text" name="contenido_tarea" placeholder="Tarea" class="form-control" autofocus>
+                            </div>
+                            <div class="form-group">
+                                <select name="categoria_tarea" class="form-control">
+                                    <option disabled selected>Selecciona una categoria</option>
+                                    <option>Corto plazo</option>
+                                    <option>Largo plazo</option>
+                                    <option>Urgente</option>
+                                </select>
+                            </div>
+                            <div>
+                                <center><label>FECHA LIMITE PARA REALIZAR LA TAREA</label></center>
+                                <input type="date" name="fecha_limite" step="1" style="width: 100%; margin-bottom: 1em; text-align: center">
+                            </div>
+
+                            <button type="submit" class="btn-primary btn-block">
+                                Guardar
+                            </button>
+                        </form>
+                    </div>
+
+                    <div class="card-body">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Tarea</th>
+                                        <th scope="col">Categoria</th>
+                                        <th scope="col">Fecha limite</th>
+                                        <th scope="col" style="text-align: left;">Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for tarea in listaTareas: %}
+                                    <tr>
+                                        <td>
+                                            <span class=" {% if tarea.hecha == 1 %} tarea_hecha {% endif%}">
+                                                {{ tarea.contenido }}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <span class=" {% if tarea.hecha == 1 %} tarea_hecha {% endif%}">
+                                                {{ tarea.categoria }}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <span class=" {% if tarea.hecha == 1 %} tarea_hecha {% endif%}">
+                                                {{ tarea.fecha }}
+                                            </span>
+                                        </td>
+                                        <td>
+
+                                            <!-- check box -->
+                                            <a href="/tarea-hecha/{{ tarea.id }}" style="text-decoration:none">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="green" class="bi bi-check-square" viewBox="0 0 16 16">
+                                                    <path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
+                                                    <path d="M10.97 4.97a.75.75 0 0 1 1.071 1.05l-3.992 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.235.235 0 0 1 .02-.022z"/>
+                                                </svg>
+                                            </a>
+
+                                            <!--Edit-->
+                                            <a href="/editar/{{ tarea.id }}" style="text-decoration:none">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="black" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                                                    <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                                                    <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
+                                                </svg>
+                                            </a>
+
+                                            <!-- Trash -->
+                                            <a href="/eliminar-tarea/{{ tarea.id }}" style="text-decoration:none">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="red" class="bi bi-trash" viewBox="0 0 16 16">
+                                                  <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
+                                                  <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
+                                                </svg>
+                                             </a>
+
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                    </div>
+                </div>
+            {% for tarea in listaTareas: %}
+                {%if tarea.edit == 1%}
+                <div class="card">
+                    <div class="card-header">
+                        <table class="table table-striped" style="text-align: center;">
+                                <thead>
+                                    <center><h2 class="display-8 text-center mt-2 titulo">EDITAR TAREA</h2></center>
+                                    <tr>
+                                        <th scope="col">Tarea</th>
+                                        <th scope="col">Categoria</th>
+                                        <th scope="col">Fecha limite</th>
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                                {{ tarea.contenido }}
+                                        </td>
+                                        <td>
+                                                {{ tarea.categoria }}
+                                        </td>
+                                        <td>
+                                                {{tarea.fecha}}
+                                        </td>
+                                    </tr>
+                                </tbody>
+                        </table>
+                    </div>
+
+                    <div class="card-body">
+                        <form name ="edit" autocomplete="off" action="/editar-tarea/{{tarea.id}}" method="post">
+
+                                <div class="form-group">
+                                    <input type="text" name="nuevo_contenido" placeholder="Nueva tarea" class="form-control" autofocus>
+                                </div>
+
+                                <div class="form-group">
+                                    <select name="nCategoria" class="form-control">
+                                        <option>Seleccione una categoria</option>
+                                        <option>Corto plazo</option>
+                                        <option>Largo plazo</option>
+                                        <option>Urgente</option>
+                                    </select>
+                                </div>
+
+                                <div>
+                                <center><label>NUEVA FECHA LIMITE PARA REALIZAR LA TAREA</label></center>
+                                <input type="date" placeholder="Fecha limite" name="nueva_fecha" step="1" style="width: 100%; margin-bottom: 1em; text-align: center">
+                                </div>
+
+                                <button type="submit" class="btn-primary btn-block">
+                                    Actualizar
+                                </button>
+                        </form>
+                    </div>
+                </div>
+                {%endif%}
+            {%endfor%}
+            </div>
+        </div>
+
+    </main>
+
+</body>
+</html>
